@@ -30,9 +30,11 @@ async fn main() -> Result<(), anyhow::Error> {
         client.discord.update_activity(rp).await
     );
 
+    // read_line to prevent main from terminating
     let mut r = String::new();
     let _ = std::io::stdin().read_line(&mut r);
 
+    // after termination signal
     tracing::info!(
         "cleared activity: {:?}",
         client.discord.clear_activity().await
