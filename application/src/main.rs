@@ -1,4 +1,14 @@
+use futures_util::{SinkExt, StreamExt};
+use log::*;
+use std::net::SocketAddr;
 use std::time::SystemTime;
+use tokio::net::{TcpListener, TcpStream};
+use tokio_tungstenite::{
+    accept_async,
+    tungstenite::{Error, Result},
+};
+use tracing::info;
+
 use {anyhow, discord_sdk as ds, tokio, tracing};
 
 const APP_ID: ds::AppId = 1300015589540106240;
@@ -22,13 +32,30 @@ async fn main() -> Result<(), anyhow::Error> {
     });
 
     // build activity
-    let rp = ds::activity::ActivityBuilder::default().start_timestamp(SystemTime::now());
+    let rp = ds::activity::ActivityBuilder::default()
+        .details("song".to_owned())
+        .state("on platform".to_owned())
+        .start_timestamp(SystemTime::now());
 
     // update activity
     tracing::info!(
         "updated activity: {:?}",
         client.discord.update_activity(rp).await
     );
+
+    // open websocket server
+    let addr = "127.0.0.1:9002";
+    let listener = TcpListener::bind(&addr).await.expect("can't listen");
+    info!("websocket listening on {}", addr);
+
+    while let Ok((stream, _)) = listener.accept().await {
+        let peer = stream
+            .peer_addr()
+            .expect("connected streams should have a peer address");
+        info!("peer address is {}", peer);
+
+        tokio::spawn(accept_connection(peer, stream));
+    }
 
     // read_line to prevent main from terminating
     let mut r = String::new();
@@ -75,4 +102,28 @@ pub async fn make_client(subs: ds::Subscriptions) -> Client {
         user,
         wheel,
     }
+}
+
+async fn accept_connection(peer: SocketAddr, stream: TcpStream) {
+    if let Err(e) = handle_connection(peer, stream).await {
+        match e {
+            Error::ConnectionClosed | Error::Protocol(_) | Error::Utf8 => (),
+            err => error!("error processing connection: {}", err),
+        }
+    }
+}
+
+async fn handle_connection(peer: SocketAddr, stream: TcpStream) -> Result<()> {
+    let mut ws_stream = accept_async(stream).await.expect("Failed to accept");
+
+    info!("New WebSocket connection: {}", peer);
+
+    while let Some(msg) = ws_stream.next().await {
+        let msg = msg?;
+        if msg.is_text() || msg.is_binary() {
+            ws_stream.send(msg).await?;
+        }
+    }
+
+    Ok(())
 }
