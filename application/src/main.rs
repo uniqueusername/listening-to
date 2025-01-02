@@ -114,9 +114,9 @@ async fn accept_connection(peer: SocketAddr, stream: TcpStream) {
 }
 
 async fn handle_connection(peer: SocketAddr, stream: TcpStream) -> Result<()> {
-    let mut ws_stream = accept_async(stream).await.expect("Failed to accept");
+    let mut ws_stream = accept_async(stream).await.expect("failed to accept");
 
-    info!("New WebSocket connection: {}", peer);
+    info!("new websocket connection: {}", peer);
 
     while let Some(msg) = ws_stream.next().await {
         let msg = msg?;

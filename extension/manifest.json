@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "listening to",
+  "version": "0.1",
+  "description": "youtube music discord rich presence bridge",
+  "content_scripts": [
+    {
+      "matches": ["https://music.youtube.com/*"],
+      "js": ["main.js"]
+    }
+  ]
+}
