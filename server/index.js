@@ -5,7 +5,6 @@ import DiscordRPC from 'discord-rpc'
 const app = express()
 const port = 2945
 const clientId = '1300015589540106240'
-
 const client = new DiscordRPC.Client({ transport: 'ipc' })
 
 client.on('ready', () => {
@@ -33,7 +32,7 @@ function setActivity(song, artist, art) {
   client.setActivity({
     details: song,
     state: artist,
-    largeImageKey: art || 'youtube_music_logo',
+    largeImageKey: art,
     largeImageText: song,
   }).catch((e) =>  {
     console.error(e)

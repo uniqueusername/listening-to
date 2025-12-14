@@ -6,11 +6,11 @@ function sendSongInfo() {
     document.querySelector("yt-formatted-string.byline.style-scope.ytmusic-player-bar .yt-simple-endpoint.style-scope.yt-formatted-string")?.innerText
       ?? document.querySelector("yt-formatted-string.byline.style-scope.ytmusic-player-bar .style-scope.yt-formatted-string")?.innerText
       ?? ""
-  const art = document.querySelector(".image.style-scope.ytmusic-player-bar")?.src
+  const bigImage = document.querySelector("#song-image img")?.src
+  const art = (bigImage && !bigImage.includes("data:image.gif")) ? bigImage
+    : document.querySelector(".image.style-scope.ytmusic-player-bar")?.src
 
-  if (song) {
-    port.postMessage({ song, artist, art })
-  }
+  if (song) port.postMessage({ song, artist, art })
 }
 
 const observer = new MutationObserver(sendSongInfo)
