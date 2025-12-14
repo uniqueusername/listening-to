@@ -6,9 +6,10 @@ function sendSongInfo() {
     document.querySelector("yt-formatted-string.byline.style-scope.ytmusic-player-bar .yt-simple-endpoint.style-scope.yt-formatted-string")?.innerText
       ?? document.querySelector("yt-formatted-string.byline.style-scope.ytmusic-player-bar .style-scope.yt-formatted-string")?.innerText
       ?? ""
+  const art = document.querySelector(".image.style-scope.ytmusic-player-bar")?.src
 
   if (song) {
-    port.postMessage({ song, artist })
+    port.postMessage({ song, artist, art })
   }
 }
 

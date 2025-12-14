@@ -18,8 +18,8 @@ app.use(cors())
 app.use(express.json())
 
 app.post('/', (req, res) => {
-  const { song, artist } = req.body
-  setActivity(song, artist)
+  const { song, artist, art } = req.body
+  setActivity(song, artist, art)
   res.send(req.body)
 })
 
