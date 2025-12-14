@@ -27,14 +27,15 @@ app.listen(port, () => {
   console.log(`listening on port ${port}`)
 })
 
-function setActivity(song, artist) {
-  if (!client) {
-    return;
-  }
+function setActivity(song, artist, art) {
+  if (!client) return
 
   client.setActivity({
     details: song,
     state: artist,
-    instance: false,
-  });
+    largeImageKey: art || 'youtube_music_logo',
+    largeImageText: song,
+  }).catch((e) =>  {
+    console.error(e)
+  })
 }
