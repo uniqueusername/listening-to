@@ -1,10 +1,13 @@
 const port = browser.runtime.connect()
 
 function sendSongInfo() {
-  const song = document.querySelector(".title.style-scope.ytmusic-player-bar").innerText
-  const artist = document.querySelector(".byline.style-scope.ytmusic-player-bar").innerText
+  const song = document.querySelector(".title.style-scope.ytmusic-player-bar")?.innerText
+  const artist =
+    document.querySelector("yt-formatted-string.byline.style-scope.ytmusic-player-bar .yt-simple-endpoint.style-scope.yt-formatted-string")?.innerText
+      ?? document.querySelector("yt-formatted-string.byline.style-scope.ytmusic-player-bar .style-scope.yt-formatted-string")?.innerText
+      ?? ""
 
-  if (song && artist) {
+  if (song) {
     port.postMessage({ song, artist })
   }
 }
