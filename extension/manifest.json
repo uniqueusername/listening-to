@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "listening to",
-  "version": "0.1",
+  "version": "1.0.0",
   "description": "youtube music discord rich presence bridge",
   "host_permissions": ["http://localhost:2945/*", "http://127.0.0.1:2945/*"],
   "background": {
@@ -12,5 +12,13 @@
       "matches": ["*://music.youtube.com/*"],
       "js": ["watcher.js"]
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "@listening-to",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  }
 }
