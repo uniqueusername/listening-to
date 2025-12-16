@@ -1,0 +1,12 @@
+diff --git a/node_modules/discord-rpc/src/transports/ipc.js b/node_modules/discord-rpc/src/transports/ipc.js
+index f050a01..151216a 100644
+--- a/node_modules/discord-rpc/src/transports/ipc.js
++++ b/node_modules/discord-rpc/src/transports/ipc.js
+@@ -115,7 +115,6 @@ class IPCTransport extends EventEmitter {
+       v: 1,
+       client_id: this.client.clientId,
+     }));
+-    socket.pause();
+     socket.on('readable', () => {
+       decode(socket, ({ op, data }) => {
+         switch (op) {

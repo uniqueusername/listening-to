@@ -11,7 +11,7 @@ client.on('ready', () => {
   console.log(`connected to discord client`)
 })
 
-client.login({ clientId }).catch(console.error);
+await client.login({ clientId }).catch(console.error);
 
 app.use(cors())
 app.use(express.json())
