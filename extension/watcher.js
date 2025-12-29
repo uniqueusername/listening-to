@@ -1,5 +1,3 @@
-const port = browser.runtime.connect()
-
 function sendSongInfo() {
   const song = document.querySelector(".title.style-scope.ytmusic-player-bar")?.innerText
   const artist =
@@ -10,7 +8,7 @@ function sendSongInfo() {
   const art = (bigImage && !bigImage.includes("data:image.gif")) ? bigImage
     : document.querySelector(".image.style-scope.ytmusic-player-bar")?.src
 
-  if (song) port.postMessage({ song, artist, art })
+  if (song) browser.runtime.sendMessage({ song, artist, art }).catch(() => {})
 }
 
 const observer = new MutationObserver(sendSongInfo)
